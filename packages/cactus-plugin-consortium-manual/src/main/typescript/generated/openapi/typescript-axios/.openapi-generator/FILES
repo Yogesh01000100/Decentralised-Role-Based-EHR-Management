@@ -1,6 +1,0 @@
-.gitignore
-api.ts
-base.ts
-common.ts
-configuration.ts
-index.ts

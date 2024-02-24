@@ -9,6 +9,8 @@ logs/
 jspm_packages/
 generated-sources/
 coverage/
+packages/
+packages-python/
 # Optional npm cache directory
 .npm
 

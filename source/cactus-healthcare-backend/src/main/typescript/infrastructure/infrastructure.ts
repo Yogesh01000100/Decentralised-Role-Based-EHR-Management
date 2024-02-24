@@ -232,7 +232,7 @@ export class HealthCareAppDummyInfrastructure {
     const adminWalletOrg2 = enrollAdminOutOrg2[1];
     const [bridgeIdentity] = await this.fabric1.enrollUserV2({
       wallet: adminWalletOrg2,
-      enrollmentID: "bridge1",
+      enrollmentID: "bridge",
       organization: "org2",
     });
 
@@ -244,7 +244,7 @@ export class HealthCareAppDummyInfrastructure {
     const registerUsers=async(arr:UserData[])=>
     {
       for(let i=0; i<arr.length;i++){
-        const {u_id,k_id, role }=arr[i];
+        const { u_id, k_id, role } = arr[i];
       
         const [userIdentity] = await this.fabric1.enrollUserV2({
           wallet: adminWalletOrg1,
@@ -264,9 +264,15 @@ export class HealthCareAppDummyInfrastructure {
     await registerUsers(patients);
     await registerUsers(assistantDoctors);
 
-    const keychainEntryKey3 = "bridge1";
-    const keychainEntryValue3 = JSON.stringify(bridgeIdentity);
-    keychainEntries[keychainEntryKey3] = keychainEntryValue3;
+    const keychainEntryKey = "bridge";
+    const keychainEntryValue = JSON.stringify(bridgeIdentity);
+    keychainEntries[keychainEntryKey] = keychainEntryValue;
+    const keychainEntryKeyAdmin1="adminOrg1";
+    const keychainEntryAdmin1Value=JSON.stringify(enrollAdminOutOrg1[0]);
+    keychainEntries[keychainEntryKeyAdmin1]=keychainEntryAdmin1Value;
+    const keychainEntryKeyAdmin2="adminOrg2";
+    const keychainEntryAdmin2Value=JSON.stringify(enrollAdminOutOrg2[0]);
+    keychainEntries[keychainEntryKeyAdmin2]=keychainEntryAdmin2Value;
 
     const formattedEntries = Object.fromEntries(
       Object.entries(keychainEntries).map(([key, value]) => {
@@ -369,17 +375,20 @@ export class HealthCareAppDummyInfrastructure {
     this.log.info("sshConfig details : ",sshConfig);
     const keychainEntryKey1 = "userA";
     const keychainEntryValue1 = JSON.stringify(userIdentity1);
-
     const keychainEntryKey2 = "userY";
     const keychainEntryValue2 = JSON.stringify(userIdentity2);
-
     const keychainEntryKey3 = "bridge2";
     const keychainEntryValue3 = JSON.stringify(bridgeIdentity);
-
+    const keychainEntryKey4="adminOrg1";
+    const keychainEntryValue4=JSON.stringify(enrollAdminOutOrg1[0]);
+    const keychainEntryKey5="adminOrg2";
+    const keychainEntryValue5=JSON.stringify(enrollAdminOutOrg2[0]);
     const keychainEntries = {
       [keychainEntryKey1]: keychainEntryValue1,
       [keychainEntryKey2]: keychainEntryValue2,
-      [keychainEntryKey3]: keychainEntryValue3
+      [keychainEntryKey3]: keychainEntryValue3,
+      [keychainEntryKey4]: keychainEntryValue4,
+      [keychainEntryKey5]: keychainEntryValue5,
     };
   
     const formattedEntries = Object.fromEntries(
@@ -424,11 +433,7 @@ export class HealthCareAppDummyInfrastructure {
       instanceId: uuidv4(),
       keychainId: CryptoMaterial.keychains.keychain2.id,
       logLevel: undefined,
-      backend: new Map([
-        [keychainEntryKey1, keychainEntryValue1],
-        [keychainEntryKey2, keychainEntryValue2],
-        [keychainEntryKey3, keychainEntryValue3],
-      ]),
+      backend: new Map(Object.entries(keychainEntries))
     });
 
     const pluginRegistry2 = new PluginRegistry({ plugins: [keychainPlugin2] });
