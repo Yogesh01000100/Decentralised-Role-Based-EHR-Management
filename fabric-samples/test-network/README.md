@@ -68,7 +68,7 @@ As there is no Docker-Daemon when using podman, only the `./network.sh deployCCA
 
 "orderers": {
     "orderer.example.com": {
-        "url": "grpcs://localhost:8000",
+        "url": "grpc://localhost:8000",
         "tlsCACerts": {
             "pem": "-----BEGIN CERTIFICATE-----\n...certificate contents...\n-----END CERTIFICATE-----\n"
         },
@@ -77,3 +77,7 @@ As there is no Docker-Daemon when using podman, only the `./network.sh deployCCA
         }
     }
 }
+
+{"credentials":{"certificate":"-----BEGIN CERTIFICATE-----\nMIICkDCCAjagAwIBAgIULQzHnDuZzy5zR/RmXm4aTO0wMbcwCgYIKoZIzj0EAwIw\naDELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK\nEwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMt\nY2Etc2VydmVyMB4XDTI0MDMwMjE1NDkwMFoXDTI1MDMwMjE4MDkwMFowTjEwMAsG\nA1UECxMEb3JnMTANBgNVBAsTBmNsaWVudDASBgNVBAsTC2RlcGFydG1lbnQxMRow\nGAYDVQQDExFqYXZhc2NyaXB0QXBwVXNlcjBZMBMGByqGSM49AgEGCCqGSM49AwEH\nA0IABCRcNANDlTQLiCfHj2SSoYyWNpVO0ejMx9Kk0LcjBaK2ZpCnx3yuuPHBiZD0\nhnq5JnPQ06Tp7vpKq6NisSGE3pKjgdcwgdQwDgYDVR0PAQH/BAQDAgeAMAwGA1Ud\nEwEB/wQCMAAwHQYDVR0OBBYEFJHkPsmnWM4Bb7h+wqS3DNtoQ7hdMB8GA1UdIwQY\nMBaAFFo2W++VuRGiA8s0qLVFh2ginALqMHQGCCoDBAUGBwgBBGh7ImF0dHJzIjp7\nImhmLkFmZmlsaWF0aW9uIjoib3JnMS5kZXBhcnRtZW50MSIsImhmLkVucm9sbG1l\nbnRJRCI6ImphdmFzY3JpcHRBcHBVc2VyIiwiaGYuVHlwZSI6ImNsaWVudCJ9fTAK\nBggqhkjOPQQDAgNIADBFAiEAv7ZANjlWUr8wBl1hekQPiZYoe9SPvI72v5Q42UHx\nDyUCIDCp3VyiDvLHaTC2y5BFXvb8KUzLArHnl+XNRoLDjcGS\n-----END CERTIFICATE-----\n","privateKey":"-----BEGIN PRIVATE KEY-----\r\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgpijwzJNkdRo6ZsWo\r\nNU1avhGl89qpcPNRyH9QGKQIxkahRANCAAQkXDQDQ5U0C4gnx49kkqGMljaVTtHo\r\nzMfSpNC3IwWitmaQp8d8rrjxwYmQ9IZ6uSZz0NOk6e76SqujYrEhhN6S\r\n-----END PRIVATE KEY-----\r\n"},"mspId":"Org1MSP","type":"X.509","version":1}
+
+// add the "version":1
