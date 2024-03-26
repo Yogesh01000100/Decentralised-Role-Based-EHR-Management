@@ -15,7 +15,7 @@ const cacheMiddleware = (duration) => {
 		} else {
 			res.sendResponse = res.send;
 			res.send = (body) => {
-				cache.put(key, body, duration * 1000); // Cache duration is specified in seconds
+				cache.put(key, body, duration * 1000);
 				res.sendResponse(body);
 			};
 			next();
@@ -31,11 +31,11 @@ const port = 3000;
 const channelName = process.env.CHANNEL_NAME || 'mychannel';
 const chaincodeName = 'basic';
 const walletPath = path.join(__dirname, 'wallet');
-const org1UserId = '862da243-387d-5348-9c89-61bbac422a3a';
+const org1UserId = 'c84c1dd3-8d65-5ba9-996f-84e9dc9599ae';
 
-// Declare the gateway variable outside the route handler
+
 let gateway;
-
+let count=0;
 // Connect to the Hyperledger Fabric network when the server starts
 (async () => {
 	try {
@@ -70,7 +70,7 @@ let gateway;
 		console.log('Connected to the Hyperledger Fabric network');
 	} catch (error) {
 		console.error(`Error connecting to the network: ${error}`);
-		process.exit(1); // Exit the application if connection fails
+		process.exit(1);
 	}
 })();
 
@@ -103,18 +103,17 @@ app.post('/createDoctor', async (req, res) => {
 app.get('/getMyProfileDoctor/:doctorId',
 	cacheMiddleware(5),
 	async (req, res) => {
-		const { doctorId } = req.params; // Extract doctorId from URL parameters
+		const { doctorId } = req.params;
+
 		try {
-			// Ensure connection to gateway is established
 			const network = await gateway.getNetwork(channelName);
 			const contract = network.getContract(chaincodeName);
 
-			// Evaluate transaction to get doctor's profile
 			const result = await contract.evaluateTransaction(
 				'GetMyProfileDoctor',
 				doctorId
 			);
-
+			console.log('request received!',count+=1);
 			const profile = JSON.parse(result.toString());
 			res.status(200).json(profile);
 		} catch (error) {
@@ -576,6 +575,27 @@ app.post('/createAppointment', async (req, res) => {
 		});
 	} catch (error) {
 		console.error(`Failed to create appointment: ${error}`);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.get('/getHospitalRole10', async (req, res) => {
+
+	try {
+
+		const network = await gateway.getNetwork(channelName);
+		const contract = network.getContract(chaincodeName);
+
+		const result = await contract.evaluateTransaction('commonFunction1');
+		const resultJson = JSON.parse(result.toString());
+
+		res.json({
+			success: true,
+			message: 'Hospital data retrieved successfully!',
+			data: resultJson
+		});
+	} catch (error) {
+		console.error(`Failed to retrieve data:  ${error}`);
 		res.status(500).json({ error: error.message });
 	}
 });

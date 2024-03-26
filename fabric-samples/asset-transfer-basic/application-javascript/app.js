@@ -5,7 +5,8 @@ const { Wallets } = require('fabric-network');
 const FabricCAServices = require('fabric-ca-client');
 const { buildCAClient, registerAndEnrollUser, enrollAdmin } = require('./CAUtil.js');
 const { buildCCPOrg1, buildWallet } = require('./AppUtil.js');
-const networkData = require('./networkData'); // Assuming this is the correct path to your network data
+const networkData = require('./networkData');
+const genericData=require('./GenericData.js');
 
 const app = express();
 const port = 3002;
@@ -29,7 +30,6 @@ async function enrollUsersFromRole(caClient, wallet, usersArray, roleDescription
 	}
 }
 
-
 app.get('/enrollUsers/', async (req, res) => {
 	try {
 		const ccp = buildCCPOrg1();
@@ -48,6 +48,24 @@ app.get('/enrollUsers/', async (req, res) => {
 
 		// Enroll Additional Roles from NetworkA
 		for (const role of networkData.NetworkA.AdditionalRoles) {
+			await enrollUsersFromRole(caClient, wallet, [role], role.role);
+		}
+
+		res.json({ message: 'Users enrolled successfully' });
+	} catch (error) {
+		console.error(`Error enrolling users: ${error}`);
+		res.status(500).json({ error: 'Internal Server Error' });
+	}
+});
+
+app.get('/enrollUsers1/', async (req, res) => {
+	try {
+		const ccp = buildCCPOrg1();
+		const caClient = buildCAClient(FabricCAServices, ccp, 'ca.org1.example.com');
+		const wallet = await buildWallet(Wallets, walletPath);
+		await enrollAdmin(caClient, wallet, mspOrg1);
+
+		for (const role of genericData.GenericRoles) {
 			await enrollUsersFromRole(caClient, wallet, [role], role.role);
 		}
 
